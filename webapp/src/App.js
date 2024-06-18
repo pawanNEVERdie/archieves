@@ -1,23 +1,38 @@
-import React from 'react';
-import './App.css';
-import Logo from './Logo';
-import {Tech} from "./tech/Tech";
-
+import React, { useState, useEffect } from "react";
+import "./App.css";
 export function App() {
-    return (
-        <div className="app">
-            <h2 className="title">my-blog</h2>
-            <div className="logo"><Logo/></div>
-            <div>
-                This project is generated with <b><a
-                href="https://github.com/shpota/goxygen">goxygen</a></b>.
-                <p/>The following list of technologies comes from
-                a REST API call to the Go-based back end. Find
-                and change the corresponding code
-                in <code>webapp/src/tech/Tech.js
-                </code> and <code>server/web/app.go</code>.
-                <Tech/>
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    const getBlogs = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/blogs");
+        if (!response.ok) {
+          throw new Error("Error loading blogs");
+        }
+        const blogs = await response.json();
+        setBlogs(blogs);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getBlogs();
+  }, []);
+  return (
+    <div className="app">
+      <header className="header">
+        <h2 className="title">Goxxygen Blog</h2>
+      </header>
+      <main className="main-content">
+        {blogs &&
+          blogs.map((blog) => (
+            <div className="blog-card" key={blog.id}>
+              <div className="blog-cover">
+                <img src={blog.coverURL} alt={blog.title} />
+              </div>
+              <h3 className="blog-title">{blog.title}</h3>
             </div>
-        </div>
-    );
+          ))}
+      </main>
+    </div>
+  );
 }

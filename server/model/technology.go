@@ -1,6 +1,7 @@
-package model
-
-type Technology struct {
-	Name    string `json:"name"`
-	Details string `json:"details"`
+ppackage model
+type Blog struct {
+    ID       int    `json:"id"`
+    Title    string `json:"title"`
+    CoverURL string `json:"coverURL"`
+    Body     string `json:"body"`
 }
